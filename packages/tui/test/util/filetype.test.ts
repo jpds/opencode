@@ -6,6 +6,7 @@ describe("util.filetype", () => {
     expect(filetype("component.tsx")).toBe("typescript")
     expect(filetype("script.js")).toBe("typescript")
     expect(filetype("main.py")).toBe("python")
+    expect(filetype("main.ads")).toBe("ada")
     expect(filetype("README.unknown")).toBeUndefined()
   })
 

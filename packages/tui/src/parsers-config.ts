@@ -382,5 +382,17 @@ export default {
         ],
       },
     },
+    {
+      filetype: "ada",
+      wasm: "https://unpkg.com/tree-sitter-wasm@1.1.4/out/ada/tree-sitter-ada.wasm",
+      queries: {
+        highlights: [
+          "https://unpkg.com/tree-sitter-wasm@1.1.4/out/ada/highlights.scm",
+        ],
+        locals: [
+          "https://unpkg.com/tree-sitter-wasm@1.1.4/out/ada/locals.scm",
+        ],
+      },
+    },
   ],
 }
