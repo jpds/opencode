@@ -20,6 +20,8 @@ export const Entry = Schema.Union([
 // Keep this list aligned with the builtin servers in opencode's LSP runtime.
 // Custom servers must declare extensions because the runtime cannot infer them.
 export const builtinServerIds = [
+  "ada-language-server",
+  "ada-language-server-gpr",
   "deno",
   "typescript",
   "vue",
