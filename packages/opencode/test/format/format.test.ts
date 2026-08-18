@@ -30,6 +30,9 @@ describe("Format", () => {
           const gofmt = statuses.find((item) => item.name === "gofmt")
           expect(gofmt).toBeDefined()
           expect(gofmt!.extensions).toContain(".go")
+          const gnatformat = statuses.find((item) => item.name === "gnatformat")
+          expect(gnatformat).toBeDefined()
+          expect(gnatformat!.extensions).toContain(".ads")
         }),
       ),
     { config: { formatter: true } },

@@ -393,6 +393,16 @@ export const cljfmt: Info = {
   },
 }
 
+export const gnatformat: Info = {
+  name: "gnatformat",
+  extensions: [".ads", ".adb", ".adc"],
+  async enabled() {
+    const match = which("gnatformat")
+    if (!match) return false
+    return [match, "$FILE"]
+  },
+}
+
 export const dfmt: Info = {
   name: "dfmt",
   extensions: [".d"],
