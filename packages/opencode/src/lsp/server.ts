@@ -1981,3 +1981,37 @@ export const JuliaLS: Info = {
     }
   },
 }
+
+export const AdaLS: Info = {
+  id: "ada-language-server",
+  extensions: [".ads", ".adb", ".adc"],
+  root: NearestRoot(["alire.toml", "*.gpr"]),
+  async spawn(root) {
+    const bin = which("ada_language_server")
+    if (!bin) {
+      return
+    }
+    return {
+      process: spawn(bin, {
+        cwd: root,
+      }),
+    }
+  },
+}
+
+export const AdaGprLS: Info = {
+  id: "ada-language-server-gpr",
+  extensions: [".gpr"],
+  root: NearestRoot(["alire.toml", "*.gpr"]),
+  async spawn(root) {
+    const bin = which("ada_language_server")
+    if (!bin) {
+      return
+    }
+    return {
+      process: spawn(bin, ["--language-gpr"], {
+        cwd: root,
+      }),
+    }
+  },
+}
