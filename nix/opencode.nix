@@ -1,5 +1,6 @@
 {
   lib,
+  pkgs,
   stdenvNoCC,
   callPackage,
   bun,
@@ -13,7 +14,25 @@
   writableTmpDirAsHomeHook,
   node_modules ? callPackage ./node-modules.nix { },
 }:
-stdenvNoCC.mkDerivation (finalAttrs: {
+stdenvNoCC.mkDerivation (finalAttrs: let
+  # Bundled tree-sitter grammar assets, fetched by Nix (content-addressed) and handed to
+  # build.ts via OPENTUI_BUNDLED_GRAMMARS_DIR. build.ts falls back to fetching them itself
+  # when this is absent (standalone runs), so the build is not Nix-only.
+  bundledGrammars = pkgs.runCommand "opencode-bundled-grammars" {
+    adaWasm = pkgs.fetchurl {
+      url = "https://unpkg.com/tree-sitter-wasm@1.1.4/out/ada/tree-sitter-ada.wasm";
+      sha256 = "dc3c9d3b68284464739b0a4dea25ea6cee78df8d2cbe7ffe5bc4a48e92353e3a";
+    };
+    adaHighlights = pkgs.fetchurl {
+      url = "https://unpkg.com/tree-sitter-wasm@1.1.4/out/ada/highlights.scm";
+      sha256 = "30a3f0d02112d2a534cf5e9e6685f84d995b438d9d3a2fdeee827effc0109e4d";
+    };
+  } ''
+    mkdir -p $out
+    cp $adaWasm $out/ada-tree-sitter.wasm
+    cp $adaHighlights $out/ada-highlights.scm
+  '';
+in {
   pname = "opencode";
   inherit (node_modules) version src;
   inherit node_modules;
@@ -46,6 +65,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
   env.MODELS_DEV_API_JSON = "${models-dev}/dist/_api.json";
   env.OPENCODE_DISABLE_MODELS_FETCH = true;
+  env.OPENTUI_BUNDLED_GRAMMARS_DIR = "${bundledGrammars}";
   env.OPENCODE_VERSION = finalAttrs.version;
   env.OPENCODE_CHANNEL = "prod";
 

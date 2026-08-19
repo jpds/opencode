@@ -1,3 +1,12 @@
+// Bundled grammars ship inside the binary as readable `$bunfs` paths via
+// `import { type: "file" }` (see docs/tree-sitter-bundling-handoff.md). The committed stub
+// exports `{}`, so dev/typecheck fall back to the remote URLs below.
+import bundled from "./bundled-grammars.gen"
+
+const ada = bundled["ada"]
+const adaWasm = ada?.wasm ?? "https://unpkg.com/tree-sitter-wasm@1.1.4/out/ada/tree-sitter-ada.wasm"
+const adaHighlights = ada?.highlights ?? "https://unpkg.com/tree-sitter-wasm@1.1.4/out/ada/highlights.scm"
+
 export default {
   // NOTE: FOR markdown, javascript and typescript, we use the opentui built-in parsers
   // Warn: when taking queries from the nvim-treesitter repo, make sure to include the query dependencies as well
@@ -384,14 +393,12 @@ export default {
     },
     {
       filetype: "ada",
-      wasm: "https://unpkg.com/tree-sitter-wasm@1.1.4/out/ada/tree-sitter-ada.wasm",
+      // Bundled into the binary by build.ts (docs/tree-sitter-bundling-handoff.md). The injected
+      // $bunfs paths are used when compiled; dev falls back to the remote URLs above, which must
+      // stay in sync with packages/opencode/script/bundled-grammars.ts.
+      wasm: adaWasm,
       queries: {
-        highlights: [
-          "https://unpkg.com/tree-sitter-wasm@1.1.4/out/ada/highlights.scm",
-        ],
-        locals: [
-          "https://unpkg.com/tree-sitter-wasm@1.1.4/out/ada/locals.scm",
-        ],
+        highlights: [adaHighlights],
       },
     },
   ],
